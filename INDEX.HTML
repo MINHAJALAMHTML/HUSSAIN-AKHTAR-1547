@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HUSSAIN AKHTAR - Personal Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f5ff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        nav {
+            margin-top: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1rem;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Home Page Styles */
+        .home-content {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .hut-container {
+            margin: 30px auto;
+            max-width: 800px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .hut-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .about-me {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin: 40px auto;
+            max-width: 800px;
+        }
+
+        .about-me h2 {
+            color: #6a11cb;
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+        }
+
+        .about-me p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        /* Gallery Styles */
+        .gallery {
+            padding: 40px 0;
+        }
+
+        .gallery h2 {
+            text-align: center;
+            color: #6a11cb;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+        }
+
+        .gallery-controls {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .gallery-controls button {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-controls button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .gallery-controls button.active {
+            background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+        }
+
+        .flower-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .flower-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .flower-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .flower-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .flower-item:hover .flower-img {
+            transform: scale(1.05);
+        }
+
+        .flower-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(106, 17, 203, 0.8);
+            color: white;
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .flower-item:hover .flower-name {
+            background: rgba(37, 117, 252, 0.9);
+        }
+
+        /* Lightbox Styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .lightbox-caption {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            font-size: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        .close-lightbox {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .close-lightbox:hover {
+            transform: rotate(90deg);
+        }
+
+        /* Publications Styles */
+        .publications {
+            padding: 40px 0;
+        }
+
+        .publications h2 {
+            text-align: center;
+            color: #6a11cb;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+        }
+
+        .pub-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .pub-item {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .pub-item:hover {
+            transform: translateX(5px);
+        }
+
+        .pub-item h3 {
+            color: #2575fc;
+            margin-bottom: 10px;
+        }
+
+        .pub-item p {
+            margin-bottom: 8px;
+        }
+
+        .pub-item .journal {
+            font-style: italic;
+            color: #555;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.2rem;
+            }
+            
+            nav a {
+                display: block;
+                margin: 5px 0;
+            }
+            
+            .flower-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .gallery-controls button {
+                margin: 5px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>HUSSAIN AKHTAR</h1>
+            <nav>
+                <a href="#home">Home</a>
+                <a href="#gallery">Flower Gallery</a>
+                <a href="#publications">Publications</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="home-content">
+            <div class="container">
+                <div class="hut-container">
+                    <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Cozy Hut in Nature" class="hut-image">
+                </div>
+                
+                <div class="about-me">
+                    <h2>About Me</h2>
+                    <p>Welcome to my personal gallery! I'm Hussain Akhtar, a nature enthusiast and photographer with a passion for capturing the beauty of flowers. My journey began 15 years ago when I started documenting the diverse flora in my region.</p>
+                    <p>With a background in botany and digital arts, I combine scientific knowledge with artistic vision to create unique floral imagery. Each photograph in my gallery represents hours of patience and dedication to capturing nature's intricate details.</p>
+                    <p>When I'm not behind the camera, I enjoy hiking, gardening, and contributing to conservation efforts. My work has been featured in several botanical publications and nature exhibitions.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="gallery">
+            <div class="container">
+                <h2>MY Gallery</h2>
+                <div class="gallery-controls">
+                    <button class="filter-btn active" data-filter="all">All IMAGES</button>
+                    <button class="filter-btn" data-filter="rose">BESTIMAGES</button>
+                    <button class="filter-btn" data-filter="tulip">BAKRA-EID</button>
+                    <button class="filter-btn" data-filter="orchid">EVENTS'&nbsp;</button>
+                    <button class="filter-btn" data-filter="sunflower">EID</button>
+                    <button class="filter-btn" data-filter="lily">NIRMAL&nbsp;</button>
+                </div>
+                <div class="flower-grid" id="flowerGrid">
+                    <!-- Flowers will be generated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Publications Section -->
+        <section id="publications" class="publications">
+            <div class="container">
+                <h2>My Publications</h2>
+                <div class="pub-list">
+                    <div class="pub-item">
+                        <h3>Seasonal Blooms: A Photographic Journey</h3>
+                        <p><strong>Author:</strong> Hussain Akhtar</p>
+                        <p><strong>Journal:</strong> <span class="journal">Nature Photography Review</span>, 2023</p>
+                        <p>A comprehensive collection of floral photography techniques and seasonal bloom patterns across North America.</p>
+                    </div>
+                    
+                    <div class="pub-item">
+                        <h3>Macro Photography: Revealing Nature's Hidden Details</h3>
+                        <p><strong>Author:</strong> Hussain Akhtar</p>
+                        <p><strong>Journal:</strong> <span class="journal">Digital Photography Quarterly</span>, 2021</p>
+                        <p>Advanced techniques for capturing intricate details of flowers and plants using macro photography.</p>
+                    </div>
+                    
+                    <div class="pub-item">
+                        <h3>Endangered Flora: Conservation Through Photography</h3>
+                        <p><strong>Author:</strong> Hussain Akhtar</p>
+                        <p><strong>Journal:</strong> <span class="journal">Botanical Conservation Journal</span>, 2020</p>
+                        <p>Documenting rare and endangered plant species through photography to raise awareness about conservation efforts.</p>
+                    </div>
+                    
+                    <div class="pub-item">
+                        <h3>The Art of Floral Composition</h3>
+                        <p><strong>Author:</strong> Hussain Akhtar</p>
+                        <p><strong>Journal:</strong> <span class="journal">Visual Arts Today</span>, 2019</p>
+                        <p>Exploring artistic principles and techniques for creating visually compelling floral compositions.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Lightbox for enlarged images -->
+    <div id="lightbox" class="lightbox">
+        <span class="close-lightbox">×</span>
+        <img class="lightbox-content" id="lightbox-img">
+        <div class="lightbox-caption" id="lightbox-caption"></div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2023 HUSSAIN AKHTAR Personal Gallery. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Flower data with categories
+        const flowers = [
+            { name: "Red Rose", category: "rose" },
+            { name: "White Rose", category: "rose" },
+            { name: "Pink Rose", category: "rose" },
+            { name: "Yellow Rose", category: "rose" },
+            { name: "Orange Rose", category: "rose" },
+            { name: "Purple Rose", category: "rose" },
+            { name: "Blue Rose", category: "rose" },
+            { name: "Black Rose", category: "rose" },
+            { name: "Rainbow Rose", category: "rose" },
+            { name: "Garden Rose", category: "rose" },
+            { name: "Wild Rose", category: "rose" },
+            { name: "Tea Rose", category: "rose" },
+            { name: "Climbing Rose", category: "rose" },
+            { name: "Miniature Rose", category: "rose" },
+            { name: "Hybrid Tea Rose", category: "rose" },
+            { name: "Floribunda Rose", category: "rose" },
+            { name: "Grandiflora Rose", category: "rose" },
+            { name: "Polyantha Rose", category: "rose" },
+            { name: "Damask Rose", category: "rose" },
+            { name: "Moss Rose", category: "rose" },
+            { name: "Red Tulip", category: "tulip" },
+            { name: "Yellow Tulip", category: "tulip" },
+            { name: "White Tulip", category: "tulip" },
+            { name: "Pink Tulip", category: "tulip" },
+            { name: "Purple Tulip", category: "tulip" },
+            { name: "Orange Tulip", category: "tulip" },
+            { name: "Black Tulip", category: "tulip" },
+            { name: "Parrot Tulip", category: "tulip" },
+            { name: "Fringed Tulip", category: "tulip" },
+            { name: "Double Tulip", category: "tulip" },
+            { name: "Lily-flowered Tulip", category: "tulip" },
+            { name: "Darwin Hybrid Tulip", category: "tulip" },
+            { name: "Triumph Tulip", category: "tulip" },
+            { name: "Fosteriana Tulip", category: "tulip" },
+            { name: "Greigii Tulip", category: "tulip" },
+            { name: "Kaufmanniana Tulip", category: "tulip" },
+            { name: "Species Tulip", category: "tulip" },
+            { name: "Phalaenopsis Orchid", category: "orchid" },
+            { name: "Cattleya Orchid", category: "orchid" },
+            { name: "Dendrobium Orchid", category: "orchid" },
+            { name: "Oncidium Orchid", category: "orchid" },
+            { name: "Miltonia Orchid", category: "orchid" },
+            { name: "Vanda Orchid", category: "orchid" },
+            { name: "Paphiopedilum Orchid", category: "orchid" },
+            { name: "Cymbidium Orchid", category: "orchid" },
+            { name: "Brassia Orchid", category: "orchid" },
+            { name: "Bulbophyllum Orchid", category: "orchid" },
+            { name: "Ludisia Orchid", category: "orchid" },
+            { name: "Maxillaria Orchid", category: "orchid" },
+            { name: "Odontoglossum Orchid", category: "orchid" },
+            { name: "Vanilla Orchid", category: "orchid" },
+            { name: "Common Sunflower", category: "sunflower" },
+            { name: "Giant Sunflower", category: "sunflower" },
+            { name: "Dwarf Sunflower", category: "sunflower" },
+            { name: "Red Sunflower", category: "sunflower" },
+            { name: "Orange Sunflower", category: "sunflower" },
+            { name: "White Sunflower", category: "sunflower" },
+            { name: "Teddy Bear Sunflower", category: "sunflower" },
+            { name: "Italian White Sunflower", category: "sunflower" },
+            { name: "Chianti Sunflower", category: "sunflower" },
+            { name: "Moulin Rouge Sunflower", category: "sunflower" },
+            { name: "Earthwalker Sunflower", category: "sunflower" },
+            { name: "Sunspot Sunflower", category: "sunflower" },
+            { name: "Evening Sun Sunflower", category: "sunflower" },
+            { name: "Lemon Queen Sunflower", category: "sunflower" },
+            { name: "Asiatic Lily", category: "lily" },
+            { name: "Oriental Lily", category: "lily" },
+            { name: "Trumpet Lily", category: "lily" },
+            { name: "Orienpet Lily", category: "lily" },
+            { name: "LA Hybrid Lily", category: "lily" },
+            { name: "Daylily", category: "lily" },
+            { name: "Calla Lily", category: "lily" },
+            { name: "Peace Lily", category: "lily" },
+            { name: "Canna Lily", category: "lily" },
+            { name: "Water Lily", category: "lily" },
+            { name: "Tiger Lily", category: "lily" },
+            { name: "Easter Lily", category: "lily" },
+            { name: "Regal Lily", category: "lily" },
+            { name: "Stargazer Lily", category: "lily" },
+            { name: "Casablanca Lily", category: "lily" },
+            { name: "Madonna Lily", category: "lily" },
+            { name: "Tulip", category: "other" },
+            { name: "Orchid", category: "other" },
+            { name: "Sunflower", category: "other" },
+            { name: "Daisy", category: "other" },
+            { name: "Lily", category: "other" },
+            { name: "Carnation", category: "other" },
+            { name: "Iris", category: "other" },
+            { name: "Peony", category: "other" },
+            { name: "Daffodil", category: "other" },
+            { name: "Marigold", category: "other" },
+            { name: "Chrysanthemum", category: "other" },
+            { name: "Poppy", category: "other" },
+            { name: "Lavender", category: "other" },
+            { name: "Magnolia", category: "other" },
+            { name: "Jasmine", category: "other" },
+            { name: "Hibiscus", category: "other" },
+            { name: "Lilac", category: "other" },
+            { name: "Azalea", category: "other" },
+            { name: "Camellia", category: "other" },
+            { name: "Gardenia", category: "other" },
+            { name: "Begonia", category: "other" },
+            { name: "Dahlia", category: "other" },
+            { name: "Freesia", category: "other" },
+            { name: "Gladiolus", category: "other" },
+            { name: "Hyacinth", category: "other" },
+            { name: "Anemone", category: "other" },
+            { name: "Aster", category: "other" },
+            { name: "Bleeding Heart", category: "other" },
+            { name: "Bluebell", category: "other" },
+            { name: "Buttercup", category: "other" },
+            { name: "Cosmos", category: "other" },
+            { name: "Dianthus", category: "other" },
+            { name: "Foxglove", category: "other" },
+            { name: "Geranium", category: "other" },
+            { name: "Gerbera", category: "other" },
+            { name: "Goldenrod", category: "other" },
+            { name: "Heather", category: "other" },
+            { name: "Hollyhock", category: "other" },
+            { name: "Honeysuckle", category: "other" },
+            { name: "Hydrangea", category: "other" },
+            { name: "Impatiens", category: "other" },
+            { name: "Larkspur", category: "other" },
+            { name: "Lupine", category: "other" },
+            { name: "Morning Glory", category: "other" },
+            { name: "Nasturtium", category: "other" },
+            { name: "Pansy", category: "other" },
+            { name: "Petunia", category: "other" },
+            { name: "Phlox", category: "other" },
+            { name: "Primrose", category: "other" },
+            { name: "Ranunculus", category: "other" },
+            { name: "Salvia", category: "other" },
+            { name: "Snapdragon", category: "other" },
+            { name: "Stock", category: "other" },
+            { name: "Sweet Pea", category: "other" },
+            { name: "Verbena", category: "other" },
+            { name: "Viola", category: "other" },
+            { name: "Zinnia", category: "other" },
+            { name: "Amaryllis", category: "other" },
+            { name: "Anthurium", category: "other" },
+            { name: "Bird of Paradise", category: "other" },
+            { name: "Bougainvillea", category: "other" },
+            { name: "Broom", category: "other" },
+            { name: "Crocus", category: "other" },
+            { name: "Datura", category: "other" },
+            { name: "Delphinium", category: "other" },
+            { name: "Echinacea", category: "other" },
+            { name: "Everlasting", category: "other" },
+            { name: "Fennel", category: "other" },
+            { name: "Forsythia", category: "other" },
+            { name: "Fritillaria", category: "other" },
+            { name: "Gazania", category: "other" },
+            { name: "Gentian", category: "other" },
+            { name: "Golden Chain", category: "other" },
+            { name: "Gorse", category: "other" },
+            { name: "Helebores", category: "other" },
+            { name: "Hellebore", category: "other" },
+            { name: "Holly", category: "other" },
+            { name: "Honesty", category: "other" },
+            { name: "Hops", category: "other" },
+            { name: "Horse Chestnut", category: "other" },
+            { name: "Hypericum", category: "other" },
+            { name: "Iceland Poppy", category: "other" },
+            { name: "Inula", category: "other" },
+            { name: "Kniphofia", category: "other" },
+            { name: "Lantana", category: "other" },
+            { name: "Lobelia", category: "other" },
+            { name: "Lunaria", category: "other" },
+            { name: "Mallow", category: "other" },
+            { name: "Mimosa", category: "other" },
+            { name: "Monarda", category: "other" },
+            { name: "Moonflower", category: "other" },
+            { name: "Narcissus", category: "other" },
+            { name: "Nemophila", category: "other" },
+            { name: "Nerine", category: "other" },
+            { name: "Oleander", category: "other" },
+            { name: "Oxalis", category: "other" },
+            { name: "Passion Flower", category: "other" },
+            { name: "Penstemon", category: "other" },
+            { name: "Periwinkle", category: "other" },
+            { name: "Protea", category: "other" },
+            { name: "Pulmonaria", category: "other" },
+            { name: "Pyrethrum", category: "other" },
+            { name: "Quince", category: "other" },
+            { name: "Rhododendron", category: "other" },
+            { name: "Rockrose", category: "other" },
+            { name: "Rosemary", category: "other" },
+            { name: "Rowan", category: "other" },
+            { name: "Sage", category: "other" },
+            { name: "Scabious", category: "other" },
+            { name: "Sedum", category: "other" },
+            { name: "Sidalcea", category: "other" },
+            { name: "Snowdrop", category: "other" },
+            { name: "Sorrel", category: "other" },
+            { name: "St John's Wort", category: "other" },
+            { name: "Statice", category: "other" },
+            { name: "Strelitzia", category: "other" },
+            { name: "Teasel", category: "other" },
+            { name: "Thistle", category: "other" },
+            { name: "Tithonia", category: "other" },
+            { name: "Torenia", category: "other" },
+            { name: "Trillium", category: "other" },
+            { name: "Trollius", category: "other" },
+            { name: "Valerian", category: "other" },
+            { name: "Viburnum", category: "other" },
+            { name: "Wallflower", category: "other" },
+            { name: "Water Lily", category: "other" },
+            { name: "Wisteria", category: "other" },
+            { name: "Yarrow", category: "other" },
+            { name: "Zantedeschia", category: "other" }
+        ];
+
+        // Generate flower gallery
+        document.addEventListener('DOMContentLoaded', function() {
+            const flowerGrid = document.getElementById('flowerGrid');
+            
+            // Create flower items
+            flowers.forEach((flower, index) => {
+                const flowerItem = document.createElement('div');
+                flowerItem.className = 'flower-item';
+                flowerItem.dataset.category = flower.category;
+                
+                const flowerImg = document.createElement('img');
+                flowerImg.className = 'flower-img';
+                // Use a flower-specific image URL with the flower name as seed
+                const seed = flower.name.replace(/\s+/g, '-').toLowerCase();
+                flowerImg.src = `https://picsum.photos/seed/${seed}/300/200.jpg`;
+                flowerImg.alt = `Beautiful ${flower.name} flower`;
+                
+                const flowerName = document.createElement('div');
+                flowerName.className = 'flower-name';
+                flowerName.textContent = flower.name;
+                
+                flowerItem.appendChild(flowerImg);
+                flowerItem.appendChild(flowerName);
+                flowerGrid.appendChild(flowerItem);
+                
+                // Add click event for lightbox
+                flowerItem.addEventListener('click', function() {
+                    openLightbox(flowerImg.src, flower.name);
+                });
+            });
+            
+            // Filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Filter flowers
+                    const filter = this.dataset.filter;
+                    const flowerItems = document.querySelectorAll('.flower-item');
+                    
+                    flowerItems.forEach(item => {
+                        if (filter === 'all' || item.dataset.category === filter) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Lightbox functionality
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxCaption = document.getElementById('lightbox-caption');
+            const closeLightbox = document.querySelector('.close-lightbox');
+            
+            function openLightbox(src, caption) {
+                lightboxImg.src = src;
+                lightboxCaption.textContent = caption;
+                lightbox.style.display = 'flex';
+            }
+            
+            closeLightbox.addEventListener('click', function() {
+                lightbox.style.display = 'none';
+            });
+            
+            // Close lightbox when clicking outside the image
+            lightbox.addEventListener('click', function(e) {
+                if (e.target === lightbox) {
+                    lightbox.style.display = 'none';
+                }
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+
+</body></html>
+
